@@ -1,0 +1,5 @@
+{
+    "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+    "extends": ["config:base", "local>vega/vega-renovate-config:default.json"]
+  }
+  
