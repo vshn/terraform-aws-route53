@@ -9,7 +9,8 @@ variable "route53_records" {
     zone    = string
     name    = optional(string, "")
     type    = string
-    ttl     = optional(number, 3600)
-    records = optional(list(string), [])
+    ttl     = optional(number, null)
+    records = optional(list(string), null)
+    alias   = optional(map(any), {})
   }))
 }
