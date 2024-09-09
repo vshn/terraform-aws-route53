@@ -26,8 +26,18 @@ resource "aws_route53_record" "records" {
   zone_id = aws_route53_zone.zones[each.value.zone].id
   name    = each.value.name
   type    = each.value.type
-  ttl     = lookup(each.value, "ttl", 3600)
-  records = each.value.records
+  ttl     = lookup(each.value, "ttl", null)
+  records = try(each.value.records, null)
+
+  dynamic "alias" {
+    for_each = length(keys(lookup(each.value, "alias", {}))) == 0 ? [] : [true]
+
+    content {
+      name                   = each.value.alias.name
+      zone_id                = aws_route53_zone.zones[each.value.zone].id
+      evaluate_target_health = lookup(each.value.alias, "evaluate_target_health", false)
+    }
+  }
 
   depends_on = [
     aws_route53_zone.zones
