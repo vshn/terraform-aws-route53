@@ -1,6 +1,13 @@
 variable "route53_zones" {
-  description = "Map of zones"
-  type        = map(any)
+  description = "List of zones"
+  type = list(object({
+    name              = string
+    tags              = optional(map(string), {})
+    dnssec_enabled    = optional(bool, false)
+    delegation_set_id = optional(string, null)
+    vpc               = optional(map(any), null)
+    cmk_arn           = optional(string, null)
+  }))
 }
 
 variable "route53_records" {
@@ -13,4 +20,10 @@ variable "route53_records" {
     records = optional(list(string), null)
     alias   = optional(map(any), {})
   }))
+}
+
+variable "route53_create_cmk" {
+  description = "Whether to create a CMK or not"
+  type        = bool
+  default     = false
 }
