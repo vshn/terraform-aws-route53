@@ -1,5 +1,8 @@
 # Changelog
 
+## v1.2.1
+- Update provider tags
+
 ## v1.2.0
 - Add support for DNSSec
 
