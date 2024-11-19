@@ -4,9 +4,8 @@ provider "aws" {
   region = "us-east-1"
   default_tags {
     tags = {
-      Managed_By   = "VSHN"
-      Git_Repo_URL = "https://git.vshn.net/pistor/mercanto-dns-terraform"
-      Product      = "DNS"
+      Managed_By = "VSHN"
+      Product    = "DNS Terraform"
     }
   }
 }
