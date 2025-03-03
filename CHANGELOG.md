@@ -1,5 +1,8 @@
 # Changelog
 
+## v1.3.0
+- Add support for IP based routing policies
+
 ## v1.2.1
 - Update provider tags
 

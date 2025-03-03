@@ -5,6 +5,8 @@ This module does the following:
 * Create route53 zones
 * Create records for route53 zones
 * Optionally enable DNSSec
+* Optionally create CIDR collections and locations
+* Optionally configure [CIDR Routing Policies](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy-ipbased.html)
 
 ## Example usage
 
@@ -18,6 +20,16 @@ module "route53" {
 ```
 
 ```hcl
+
+cidr_collections = {
+  clouds = {
+    cidr_locations = {
+      cloudscale = ["185.72.238.0/23", "185.79.232.0/22"],
+      exoscale   = ["85.217.184.0/23"]
+    }
+  }
+}
+
 route53_zones = [
   {
     name    = "vshn.ch"
@@ -36,6 +48,14 @@ route53_records = [
     type = "A"
     ttl  = 300
     records = ["1.2.3.4"]
+    cidr_location = "cloudscale"
+  },
+  {
+    zone = "vshn.ch"
+    name = "blog"
+    type = "A"
+    ttl  = 300
+    records = ["4.3.2.1"]
   }
 ]
 
