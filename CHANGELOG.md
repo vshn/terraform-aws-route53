@@ -1,5 +1,8 @@
 # Changelog
 
+## v2.0.0
+- Change index of records to avoid unnecessary changes
+
 ## v1.3.0
 - Add support for IP based routing policies
 
