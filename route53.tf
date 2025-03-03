@@ -43,6 +43,17 @@ resource "aws_route53_record" "records" {
     }
   }
 
+  dynamic "cidr_routing_policy" {
+    for_each = each.value.cidr_location == "" ? [] : [true]
+
+    content {
+      collection_id = aws_route53_cidr_location.cidr_location[each.value.cidr_location].cidr_collection_id
+      location_name = each.value.cidr_location
+    }
+  }
+
+  set_identifier = each.value.cidr_location != "" ? "${aws_route53_zone.zones[each.value.zone].id}_${each.value.name}_${each.value.type}_${each.value.cidr_location}" : null
+
   depends_on = [
     aws_route53_zone.zones
   ]
@@ -103,4 +114,35 @@ resource "aws_route53_hosted_zone_dnssec" "dnssec_zones" {
     aws_route53_key_signing_key.key_signing_keys
   ]
   hosted_zone_id = aws_route53_key_signing_key.key_signing_keys[each.value.name].hosted_zone_id
+}
+
+resource "aws_route53_cidr_collection" "cidr_collection" {
+  for_each = var.cidr_collections
+  name     = each.key
+}
+
+locals {
+  cidr_locations = flatten([
+    for collection, collection_values in var.cidr_collections : [
+      for location, location_values in collection_values.cidr_locations : {
+        name          = location
+        cidr_blocks   = location_values
+        collection_id = aws_route53_cidr_collection.cidr_collection[collection].id
+      }
+    ]
+  ])
+
+}
+
+resource "aws_route53_cidr_location" "cidr_location" {
+  for_each = {
+    for location in local.cidr_locations : location.name => location
+  }
+
+  name               = each.value.name
+  cidr_collection_id = each.value.collection_id
+  cidr_blocks        = each.value.cidr_blocks
+  depends_on = [
+    aws_route53_cidr_collection.cidr_collection
+  ]
 }
