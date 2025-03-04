@@ -25,7 +25,7 @@ resource "aws_route53_zone" "zones" {
 
 resource "aws_route53_record" "records" {
   for_each = {
-    for index, record in var.route53_records : index => record
+    for index, record in var.route53_records : "${aws_route53_zone.zones[record.zone].id}_${record.name}_${record.type}" => record
   }
   zone_id = aws_route53_zone.zones[each.value.zone].id
   name    = each.value.name
