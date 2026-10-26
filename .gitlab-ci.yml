@@ -1,4 +1,0 @@
-include:
-  - project: appuio-managed-kubernetes-services/gitlab-ci-templates
-    file: terraform-modules.yml
-    ref: main
